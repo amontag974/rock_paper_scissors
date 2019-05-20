@@ -1,9 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head> 
-
+        <title>Rock, Paper, Scissors</title>
+        <link rel="stylesheet" type="text/css" href="assets/style.css">
     </head>
     <body>
+        <div class="title">
+            <h1>Rock, Paper, Scissors!</h1>
+            <p>Play against the computer</p>
+        </div>
+        <div class="play-area">
+            <div id="rock" class="button">
+                <h2>ROCK</h2>
+            </div>
+            <div id="paper" class="button">
+                <h2>PAPER</h2>
+            </div>
+            <div id="scissors" class="button">
+                <h2>SCISSORS</h2>
+            </div>
+        </div>
+        <div><h3 class="round-alert">Select to start the game. First to 5 wins</h3></div>
+        <div class="score">
+            <h3>
+                Player Score: <span class="player-score">0</span>
+            </h3>
+            <h3>
+                Computer Score: <span class="comp-score">0</span>
+            </h3>
+        </div>
         <script type="text/javascript" src="rockpaperscissors.js"></script>
     </body>
 </html>

@@ -10,94 +10,112 @@ function computerPlay() {
     }
 }
 
-function playRound(playerSelection, computerSelection) {
+function playerPlay(e) {
+    let playerSelection = e.target.id;
+    return playerSelection;
+}
+
+function playRound(e) {
+    let computerSelection = computerPlay();
+    let playerSelection = playerPlay(e);
     if (playerSelection == 'rock') {
         switch(computerSelection) {
             case "Rock":
-                console.log("It's a tie! Pick again");
-                pickAndPlay();
+                roundAlert.textContent = "It's a tie! Pick again"
                 break;
 
             case "Paper":
-                lossCount +=1;
-                return "You Lose! Paper beats Rock";
+                roundAlert.textContent = "Computer Wins! Paper beats Rock";
+                updateComputerScore();
+                break;
 
             case "Scissors":
-                winCount +=1;
-                return "You Win! Rock beats Scissors";
+                roundAlert.textContent = "You Win! Rock beats Scissors";
+                updatePlayerScore();
+                break;
         }
     } else if (playerSelection == 'paper') {
         switch(computerSelection) {
             case "Rock":
-                winCount +=1;
-                return "You Win! Paper beats Rock";
+                roundAlert.textContent = "You Win! Paper beats Rock";
+                updatePlayerScore();
+                break;
 
             case "Paper":
-                console.log("It's a tie! Pick again");
-                pickAndPlay();
+                roundAlert.textContent = "It's a tie! Pick again"
                 break;
 
             case "Scissors":
-                lossCount +=1;
-                return "You Lose! Scissors beats Paper";
+                roundAlert.textContent = "Computer Wins! Scissors beats Paper";
+                updateComputerScore();
+                break;
         }
     } else if (playerSelection == 'scissors') {
         switch(computerSelection) {
             case "Rock":
-                lossCount +=1;
-                return "You Lose! Rock beats Scissors";
+                roundAlert.textContent = "Computer Wins! Rock beats Scissors";
+                updateComputerScore();
+                break;
 
             case "Paper":
-                winCount +=1;
-                return "You Win! Scissors beats Paper";
+                roundAlert.textContent = "You Win! Scissors beats Paper";
+                updatePlayerScore();
+                break;
 
             case "Scissors":
-                console.log("It's a tie! Pick again");
-                pickAndPlay();
+                roundAlert.textContent = "It's a tie! Pick again"
                 break;
         }
-    } 
-}
-    
-function numWins(winCount) {
-    return winCount;
+    }
+    declareWinner();
 }
 
-function numLosses(lossCount){
-    return lossCount;
+function updateComputerScore() {
+    computerScore.textContent = parseInt(computerScore.textContent) + 1;
+}
+
+function updatePlayerScore(){
+    playerScore.textContent = parseInt(playerScore.textContent) + 1;
 }
 
 function declareWinner() {
-    if (numWins(winCount)>numLosses(lossCount)) {
-        return "Player wins!";
-    } else (numWins(winCount)<numLosses(lossCount)) 
-        return "Computer wins!";
-}
 
-function playerPlay(){
-    let playerSelection = prompt("Please make your seleciton").toLowerCase();
-    while(playerSelection != "rock" && playerSelection != "paper" && playerSelection != "scissors"){
-        playerSelection = prompt("Please enter a vaild choice").toLowerCase();
+    if (playerScore.textContent == "5") {
+        roundAlert.textContent = "You Win!"
+        buttons.forEach(button => button.removeEventListener('click', playRound));
+        resetGame();
+    } else if (computerScore.textContent == "5") {
+        roundAlert.textContent = "Computer Wins!";
+        buttons.forEach(button => button.removeEventListener('click', playRound));
+        resetGame();
     }
-    return playerSelection;
 }
 
-function pickAndPlay() {
-    const playerSelection = playerPlay();
-    const computerSelection = computerPlay();
-    console.log(playRound(playerSelection, computerSelection));
+function resetGame() {
+    const div = document.createElement('div');
+    div.setAttribute('class','reset');
+    div.innerHTML = "<h3>RESET</h3>";
+    body.appendChild(div);
+    const resetButton = document.querySelector('.reset');
+    resetButton.addEventListener('click', reset);
+
 }
-    
-let winCount = 0;
-let lossCount = 0;
-let tieCount = 0;
 
-function game(){
+function reset(e) {
+    playerScore.textContent = "0";
+    computerScore.textContent = "0";
+    roundAlert.textContent = "Select to start the game. First to 5 wins";
+    this.removeEventListener('click', reset);
+    body.removeChild(this);
+    const buttons = document.querySelectorAll('.button');
+    buttons.forEach(button => button.addEventListener('click', playRound));
 
-    for (round = 0; round < 5; round++){
-        pickAndPlay();
-    }
-    console.log("Record: " + winCount + "-" + lossCount);
-    console.log(declareWinner());
-} 
-game();
+}
+
+let playerScore = document.querySelector('.player-score');
+let computerScore = document.querySelector('.comp-score');
+let roundAlert = document.querySelector('.round-alert')
+let body = document.querySelector('body');
+
+const buttons = document.querySelectorAll('.button');
+buttons.forEach(button => button.addEventListener('click', playRound));
